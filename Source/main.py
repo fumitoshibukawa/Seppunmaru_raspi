@@ -13,7 +13,7 @@ import cv2
 import numpy as np
 import math
 import serial
-import debug
+from debug import DebugImage
 ser = serial.Serial('/dev/ttyUSB0', 115200)
 
 # initialize the camera and grab a reference to the raw camera capture
@@ -109,6 +109,9 @@ def redball_detection():
     count = 0
     number = 0
 
+    #DEBUG:
+    di = DebugImage(image, 'RedBall Detection')
+
     image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     #back_image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
@@ -137,9 +140,6 @@ def redball_detection():
     if len(area) == 0:
         area.append(0)
 
-    #デバッグ用画像表示
-    debug.show_detected_Item(image, c_area)
-
     print("redball_area"+str(area))
     for i in area:
         count += 1
@@ -152,6 +152,10 @@ def redball_detection():
             c_para = 0
             max_area = 0
 
+    #DEBUG:
+    di.add_contour_line(c_area, (0, 255, 0), 5)
+    di.add_contour_line([c_para], (128, 0, 255), 5)
+    di.show()
 
     #print(area)
     print(max_area)
@@ -178,6 +182,9 @@ def blueball_detection():
     count = 0
     number = 0
 
+    #DEBUG:
+    di = DebugImage(image, 'BlueBall Detection')
+
     #image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
     # 背景差分処理
@@ -202,9 +209,6 @@ def blueball_detection():
     if len(area) == 0:
         area.append(0)
 
-    #デバッグ用画像表示
-    debug.show_detected_Item(image, c_area)
-
     print("blueball_area"+str(area))
     for i in area:
         count += 1
@@ -217,6 +221,11 @@ def blueball_detection():
         else:
             c_para = 0
             max_area = 0
+
+    #DEBUG:
+    di.add_contour_line(c_area, (0, 255, 0), 5)
+    di.add_contour_line([c_para], (128, 0, 255), 5)
+    di.show()
 
     #print(area)
 
@@ -247,6 +256,9 @@ def cun_detection():
     area = []
     count = 0
     number = 0
+
+    #DEBUG:
+    di = DebugImage(image, 'Cun Detection')
 
     #画像縮小膨張のためのカーネル
     #縮小
@@ -291,6 +303,10 @@ def cun_detection():
     else:
         circles_para = None
 
+    #DEBUG:
+    di.add_circle_line(circles_para, (128, 0, 255), 5)
+    di.show()
+
     rawCapture.truncate(0)
     return circles_para
 
@@ -309,6 +325,9 @@ def ballpyramid_detection():
     area = []
     count = 0
     number = 0
+
+    #DEBUG:
+    di = DebugImage(image, 'BallPyramid Detection')
 
     # 背景差分処理
     fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
@@ -339,9 +358,6 @@ def ballpyramid_detection():
     if len(area) == 0:
         area.append(0)
 
-    #デバッグ用画像表示
-    debug.show_detected_Item(image, c_area)
-
     print("pyramid_area"+str(area))
 
     for i in area:
@@ -357,6 +373,10 @@ def ballpyramid_detection():
             c_para = 0
             max_area = 0
 
+    #DEBUG:
+    di.add_contour_line(c_area, (0, 255, 0), 5)
+    di.add_contour_line([c_para], (128, 0, 255), 5)
+    di.show()
 
     print(max_area)
     #cv2.imshow("pyramid", range_mask_pyramid)
@@ -385,6 +405,9 @@ def maxcoffee_detection():
     area = []
     count = 0
     number = 0
+
+    #DEBUG:
+    di = DebugImage(image, 'MaxCoffee Detection')
 
     image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     back_image_hsv = cv2.cvtColor(back_image, cv2.COLOR_BGR2HSV)
@@ -420,9 +443,6 @@ def maxcoffee_detection():
     if len(area) == 0:
         area.append(0)
 
-    #デバッグ用画像表示
-    debug.show_detected_Item(image, c_area)
-
     print("maxcoffee"+str(pre_area))
 
     for i in area:
@@ -436,6 +456,11 @@ def maxcoffee_detection():
         else:
             c_para = 0
             max_area = 0
+
+    #DEBUG:
+    di.add_contour_line(c_area, (0, 255, 0), 5)
+    di.add_contour_line([c_para], (128, 0, 255), 5)
+    di.show()
 
     print(max_area)
     #cv2.imshow("mask", dilate_mask_maxcoffee)
