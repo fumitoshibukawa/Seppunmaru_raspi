@@ -17,11 +17,15 @@ def show_detected_Item( image, contours ):
     引数 image:元の画像データ contours:輪郭座標のリスト
     """
 
-    image_debug = numpy.copy(image)
+    image_debug = image.copy()
     for contour in contours:
         if len(contour) > 0:
             rect = contour
             x, y, w, h = cv2.boundingRect(rect)
             cv2.rectangle(image_debug, (x, y), (x + w, y + h), (0, 255, 0), 10)
 
+    #画像を表示
     cv2.imshow('image', image_debug)
+    #0キーを押して表示を終了
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
